@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Трекер Воды</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="welcome" class="screen">
+    <div class="welcome-screen">
+      <div class="welcome-icon">💧</div>
+      <div class="welcome-title">Добро пожаловать в Трекер Воды</div>
+      <div class="welcome-text">Следите за потреблением воды и достигайте своей дневной цели</div>
+      <div class="form-group">
+        <label class="settings-label">Ваше имя:</label>
+        <input type="text" id="userName" class="input-field" placeholder="Введите имя">
+      </div>
+      <button class="btn btn-primary" onclick="completeSetup()">Начать</button>
+    </div>
+  </div>
+
+  <div id="home" class="screen active">
+    <div class="header">Главная</div>
+    <div class="content">
+      <div class="water-display">
+        <div class="water-amount" id="currentAmount">0 мл</div>
+        <div class="water-goal">из <span id="goalDisplay">2000</span> мл</div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      </div>
+      <div class="add-buttons">
+        <button class="btn btn-outline" onclick="addWater(100)">+100 мл</button>
+        <button class="btn btn-outline" onclick="addWater(250)">+250 мл</button>
+        <button class="btn btn-primary" onclick="addWater(500)">+500 мл</button>
+      </div>
+      <button class="btn btn-outline" style="width:100%;margin-top:20px;" onclick="showCustomAmount()">Другое количество</button>
+    </div>
+  </div>
+
+  <div id="custom" class="screen">
+    <div class="header">Добавить воду</div>
+    <div class="content">
+      <div class="form-group">
+        <label class="settings-label">Количество (мл):</label>
+        <input type="number" id="customAmount" class="input-field" placeholder="Введите количество">
+      </div>
+      <button class="btn btn-primary" style="width:100%;" onclick="addCustomWater()">Добавить</button>
+      <button class="btn btn-outline" style="width:100%;margin-top:10px;" onclick="showScreen('home')">Отмена</button>
+    </div>
+  </div>
+
+  <div id="history" class="screen">
+    <div class="header">История</div>
+    <div class="content" id="historyList"></div>
+  </div>
+
+  <div id="stats" class="screen">
+    <div class="header">Статистика</div>
+    <div class="content">
+      <div class="stats-card"><div class="stats-value" id="todayTotal">0</div><div class="stats-label">мл сегодня</div></div>
+      <div class="stats-card"><div class="stats-value" id="weekAverage">0</div><div class="stats-label">мл среднее за неделю</div></div>
+      <div class="stats-card"><div class="stats-value" id="totalDays">0</div><div class="stats-label">дней отслеживания</div></div>
+      <div class="stats-card"><div class="stats-value" id="achievedDays">0</div><div class="stats-label">дней цель достигнута</div></div>
+    </div>
+  </div>
+
+  <div id="settings" class="screen">
+    <div class="header">Настройки</div>
+    <div class="content">
+      <div class="settings-item">
+        <label class="settings-label">Ваше имя:</label>
+        <input type="text" id="settingsName" class="input-field">
+      </div>
+      <div class="settings-item">
+        <label class="settings-label">Дневная цель (мл):</label>
+        <input type="number" id="goalInput" class="input-field">
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:20px;" onclick="saveSettings()">Сохранить</button>
+      <button class="btn btn-outline" style="width:100%;margin-top:10px;" onclick="logout()">🚪 Выйти</button>
+    </div>
+  </div>
+
+  <div id="reminders" class="screen">
+    <div class="header">Напоминания</div>
+    <div class="content">
+      <div class="reminder-item">
+        <span>Напоминания включены</span>
+        <div class="toggle" id="reminderToggle" onclick="toggleReminder()"></div>
+      </div>
+      <div class="settings-item">
+        <label class="settings-label">Интервал (минут):</label>
+        <input type="number" id="reminderInterval" class="input-field" value="60">
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:20px;" onclick="saveReminders()">Сохранить</button>
+    </div>
+  </div>
+
+  <div id="profile" class="screen">
+    <div class="header">Профиль</div>
+    <div class="content">
+      <div class="stats-card">
+        <div class="welcome-icon">👤</div>
+        <div class="stats-value" id="profileName">Пользователь</div>
+      </div>
+      <div class="stats-card"><div class="stats-label">Цель</div><div class="stats-value" id="profileGoal">2000 мл</div></div>
+      <div class="stats-card"><div class="stats-label">Всего выпито</div><div class="stats-value" id="profileTotal">0 л</div></div>
+      <button class="btn btn-primary" style="width:100%;margin-top:20px;" onclick="showScreen('settings')">⚙️ Настройки</button>
+      <button class="btn btn-outline" style="width:100%;margin-top:10px;" onclick="showScreen('reminders')">🔔 Напоминания</button>
+      <button class="btn btn-outline" style="width:100%;margin-top:10px;" onclick="showScreen('achievements')">🏆 Достижения</button>
+      <button class="btn btn-outline" style="width:100%;margin-top:10px;" onclick="showScreen('about')">ℹ️ О приложении</button>
+    </div>
+  </div>
+
+  <div id="achievements" class="screen">
+    <div class="header">Достижения</div>
+    <div class="content" id="achievementsList"></div>
+  </div>
+
+  <div id="about" class="screen">
+    <div class="header">О приложении</div>
+    <div class="content">
+      <div class="welcome-screen">
+        <div class="welcome-icon">💧</div>
+        <div class="welcome-title">Трекер Воды</div>
+        <div class="welcome-text">Версия 1.0</div>
+        <div class="welcome-text" style="margin-top:20px;">Простое приложение для отслеживания потребления воды.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-item active" onclick="showScreen('home')">🏠<br>Главная</button>
+    <button class="nav-item" onclick="showScreen('history')">📊<br>История</button>
+    <button class="nav-item" onclick="showScreen('stats')">📈<br>Статистика</button>
+    <button class="nav-item" onclick="showScreen('profile')">👤<br>Профиль</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
